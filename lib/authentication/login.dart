@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sns/screen/landing.page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -10,8 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final email = TextEditingController();
   final password = TextEditingController();
+  final email = TextEditingController();
   bool isLogin = true;
   String error = '';
   String snsString = 'SNS Login';
@@ -25,61 +27,70 @@ class _LoginState extends State<Login> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
-        child: Center(
-          child: SizedBox(
-            height: size.height * .3,
-            child: Card(
-              child: Padding(
+    return AuthChange(
+      builder: (user) => user == null
+          ? Scaffold(
+              body: Padding(
                 padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
-                child: Column(
-                  children: [
-                    const SizedBox(height: sizeSm),
-                    Text(
-                      snsString,
-                      style: textTheme.headlineMedium!,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
-                      child: Column(
-                        children: [
-                          TextField(
-                            controller: email,
-                            decoration: InputDecoration(
-                              label: Text(
-                                'Email',
-                                style: textTheme.labelMedium!,
+                child: Center(
+                  child: SizedBox(
+                    height: size.height * .3,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: sizeSm),
+                            Text(
+                              snsString,
+                              style: textTheme.headlineMedium!,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    controller: email,
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Email',
+                                        style: textTheme.labelMedium!,
+                                      ),
+                                    ),
+                                  ),
+                                  TextField(
+                                    controller: password,
+                                    decoration: InputDecoration(
+                                      label: Text(
+                                        'Password',
+                                        style: textTheme.labelMedium!,
+                                      ),
+                                    ),
+                                    obscureText: true,
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          TextField(
-                            controller: password,
-                            decoration: InputDecoration(
-                              label: Text(
-                                'Password',
-                                style: textTheme.labelMedium!,
-                              ),
-                            ),
-                            obscureText: true,
-                          ),
-                        ],
+                            const Spacer(),
+                            if (isLogin) _loginRegisterButtons() else _registerCancelButtons(),
+                            const SizedBox(height: sizeSm),
+                          ],
+                        ),
                       ),
                     ),
-                    const Spacer(),
-                    if (isLogin) _loginRegisterButtons() else _registerCancelButtons(),
-                    const SizedBox(height: sizeSm),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
+          : const BodyScreen(),
     );
   }
 
@@ -98,7 +109,11 @@ class _LoginState extends State<Login> {
         ElevatedButton(
           onPressed: () async {
             try {
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.text, password: password.text);
+              await FirebaseAuth.instance
+                  .createUserWithEmailAndPassword(email: email.text, password: password.text)
+                  .then(
+                    (value) => setItemState(isLogin: true),
+                  );
             } on FirebaseAuthException catch (fe) {
               if (fe.code == 'invalid-email') {
                 setState(() {
@@ -134,9 +149,7 @@ class _LoginState extends State<Login> {
         const Spacer(),
         TextButton(
           onPressed: () {
-            setState(() {
-              setItemState(isLogin: false, snsString: 'SNS Register');
-            });
+            setItemState(isLogin: false, snsString: 'SNS Register');
           },
           child: const Text('Register'),
         ),
@@ -144,9 +157,7 @@ class _LoginState extends State<Login> {
           onPressed: () async {
             try {
               await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: password.text).then(
-                    (value) => debugPrint(
-                      value.toString(),
-                    ),
+                    (value) => context.go(LandingPage.routeName),
                   );
             } on FirebaseAuthException catch (fe) {
               if (fe.code == 'invalid-email') {
