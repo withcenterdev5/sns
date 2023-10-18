@@ -150,6 +150,7 @@ class _LoginState extends State<Login> {
         TextButton(
           onPressed: () {
             setItemState(isLogin: false, snsString: 'SNS Register');
+            toast(title: 'Account Created', message: 'Account Successfully Created. You can now login.');
           },
           child: const Text('Register'),
         ),

@@ -1,7 +1,6 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sns/main.dart';
 
 class ResignScreen extends StatefulWidget {
   const ResignScreen({super.key, required this.user});
@@ -14,11 +13,11 @@ class _ResignScreenState extends State<ResignScreen> {
   @override
   void initState() {
     super.initState();
-    UserService.instance.onDelete = (user) {
-      alert(context: context, title: 'Account Deleted!', message: 'Account has been deleted permanently.');
-      context.go(MainApp.routeName);
-      debugPrint(user.toString());
-    };
+    UserService.instance.init(
+      onDelete: (user) async {
+        await alert(context: context, title: 'Account Deleted!', message: 'Account has been deleted permanently.');
+      },
+    );
   }
 
   @override

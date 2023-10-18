@@ -14,6 +14,7 @@ class _UpdateUserInfoState extends State<UpdateUserInfo> {
   final firstName = TextEditingController();
   final midName = TextEditingController();
   final lastName = TextEditingController();
+  final displayName = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,14 +31,18 @@ class _UpdateUserInfoState extends State<UpdateUserInfo> {
           const SizedBox(height: sizeSm),
           ElevatedButton(
             onPressed: () {
-              widget.user.update(
+              widget.user
+                  .update(
                 isComplete: true,
                 firstName: firstName.text,
                 middleName: midName.text,
                 lastName: lastName.text,
-              );
-              toast(title: 'Account Updated', message: 'Account successfully updated');
-              context.pop();
+                displayName: displayName.text,
+              )
+                  .then((value) {
+                toast(title: 'Account Updated', message: 'Account successfully updated');
+                context.pop();
+              });
             },
             child: const Text('Update'),
           ),
@@ -65,7 +70,7 @@ class _UpdateUserInfoState extends State<UpdateUserInfo> {
 
   SizedBox fullNameCard() {
     return SizedBox(
-      height: 250,
+      height: 280,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(sizeSm),
@@ -75,6 +80,7 @@ class _UpdateUserInfoState extends State<UpdateUserInfo> {
               InputField(controller: firstName, label: 'First Name'),
               InputField(controller: midName, label: 'Middle Name'),
               InputField(controller: lastName, label: 'Last Name'),
+              InputField(controller: displayName, label: 'Display Name'),
             ],
           ),
         ),

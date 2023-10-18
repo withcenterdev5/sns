@@ -2,6 +2,7 @@ import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sns/firebase_options.dart';
+import 'package:sns/widgets/init.dart';
 import 'package:sns/router/router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,6 +29,7 @@ class _MainAppState extends State<MainApp> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FireFlutterService.instance.init(context: router.routerDelegate.navigatorKey.currentContext!);
     });
+    mainInit();
   }
 
   @override

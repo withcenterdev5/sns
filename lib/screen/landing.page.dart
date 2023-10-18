@@ -1,6 +1,7 @@
+import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sns/init.dart';
-import 'package:sns/methods/app.bar.dart';
+import 'package:sns/widgets/init.dart';
+import 'package:sns/widgets/app.bar.dart';
 import 'package:sns/router/router.dart';
 import 'package:sns/screen/chat/chat.screen.dart';
 import 'package:sns/screen/post/post.screen.dart';
@@ -24,37 +25,59 @@ class _LandingPageState extends State<LandingPage> {
 }
 
 class BodyScreen extends StatefulWidget {
-  const BodyScreen({super.key});
-
+  const BodyScreen({super.key, this.index});
+  final int? index;
   @override
   State<BodyScreen> createState() => _BodyScreenState();
 }
 
 class _BodyScreenState extends State<BodyScreen> {
+  int index = 0;
+  late Widget widgetChild;
   @override
   void initState() {
     super.initState();
+    mainInit();
     createUser();
   }
 
-  int index = 2;
-  late Widget child;
   @override
   Widget build(BuildContext context) {
-    switch (index) {
+    switch (widget.index ?? index) {
       case 0:
-        child = const PostScreen();
+        widgetChild = const PostScreen();
         break;
       case 1:
-        child = const ChatList();
+        widgetChild = const ChatList();
         break;
       case 2:
-        child = const UserScreen();
+        widgetChild = const UserScreen();
         break;
     }
     return Scaffold(
       appBar: appBar(context),
-      body: child,
+      body: UserDoc(
+        live: false,
+        builder: (user) => Stack(
+          children: [
+            widgetChild,
+            if (user.isComplete == false)
+              Container(
+                height: 40,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                child: Center(
+                  child: Text(
+                    "Account is incomplete. Complete profile to use the app fully.",
+                    style: TextStyle(color: Theme.of(context).colorScheme.onError, fontSize: sizeSm - 3),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
       bottomNavigationBar: bottomNav(),
     );
   }
