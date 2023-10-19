@@ -1,8 +1,10 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sns/screen/chat/chat.custom.list_tile.dart';
+import 'package:sns/screen/chat/chat.custom.list_view.dart';
 import 'package:sns/widgets/app.bar.dart';
-import 'package:sns/widgets/init.dart';
+import 'package:sns/widgets/methods.dart';
 import 'package:sns/screen/chat/chat.custom.create.dart';
 import 'package:sns/widgets/stack.floating.dart';
 
@@ -24,7 +26,10 @@ class _ChatListState extends State<ChatList> {
           if (isUserCompleted(context)) {
             showGeneralDialog(
               context: context,
-              pageBuilder: (context, _, __) => ChatRoomScreen(room: room),
+              pageBuilder: (context, _, __) {
+                debugPrint('${room!.group}');
+                return ChatRoomScreen(room: room);
+              },
             );
           }
         },
@@ -33,8 +38,8 @@ class _ChatListState extends State<ChatList> {
     );
   }
 
-  final chatListViewController = ChatRoomListViewController();
-
+  final chatListViewController = CustomChatRoomController();
+  final double avatarSize = 24;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -42,8 +47,9 @@ class _ChatListState extends State<ChatList> {
         Column(
           children: [
             Expanded(
-              child: ChatRoomListView(
+              child: CustomChatRoom(
                 controller: chatListViewController,
+                tileBuilder: (context, room) => CustomChatListTile(room: room),
                 singleChatOnly: false,
                 itemBuilder: (context, room) => ChatRoomListTile(
                   room: room,
@@ -66,7 +72,10 @@ class _ChatListState extends State<ChatList> {
                 context: context,
                 builder: (context) => Dialog(
                   child: CustomCreateDialog(
-                    success: (room) => ChatService.instance.showChatRoom(room: room, context: context),
+                    success: (room) {
+                      context.pop();
+                      ChatService.instance.showChatRoom(room: room, context: context);
+                    },
                     cancel: () => context.pop(),
                   ),
                 ),

@@ -1,7 +1,6 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sns/screen/post/create.post.dart';
 
 class PhotoUpload extends StatefulWidget {
   const PhotoUpload({super.key});
@@ -112,6 +111,29 @@ class _PhotoUploadState extends State<PhotoUpload> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InputFields extends StatelessWidget {
+  const InputFields({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.isContent = false,
+  });
+  final String hintText;
+  final TextEditingController controller;
+  final bool isContent;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      maxLines: isContent ? 5 : 1,
+      decoration: InputDecoration(
+        hintText: hintText,
       ),
     );
   }

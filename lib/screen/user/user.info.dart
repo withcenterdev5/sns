@@ -1,14 +1,16 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 
-class UserInformations extends StatelessWidget {
+class UserInformations extends StatefulWidget {
   const UserInformations({
     super.key,
-    required this.user,
   });
 
-  final User user;
+  @override
+  State<UserInformations> createState() => _UserInformationsState();
+}
 
+class _UserInformationsState extends State<UserInformations> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -19,10 +21,10 @@ class UserInformations extends StatelessWidget {
           SingleChildScrollView(
             child: Column(
               children: [
-                BasicField(label: 'firstName', value: user.firstName),
-                BasicField(label: 'middleName', value: user.middleName),
-                BasicField(label: 'lastName', value: user.lastName),
-                BasicField(label: 'displayName', value: user.displayName),
+                BasicField(label: 'firstName', value: my!.firstName),
+                BasicField(label: 'middleName', value: my!.middleName),
+                BasicField(label: 'lastName', value: my!.lastName),
+                BasicField(label: 'displayName', value: my!.displayName),
               ],
             ),
           ),
@@ -32,20 +34,24 @@ class UserInformations extends StatelessWidget {
           const Divider(),
           Expanded(
             child: UserListView(
-              field: 'firstName',
+              exemptedUsers: [myUid!],
               titleBuilder: (user) => Text('${user.firstName} ${user.lastName}'),
-              subtitleBuilder: (user) => const Text('Show blocked or unblocked here'),
+              subtitleBuilder: (user) => Text(user.displayName),
               onTap: (user) => UserService.instance.showPublicProfileScreen(context: context, user: user),
               trailingBuilder: (user) => TextButton(
                 onPressed: () async {
-                  final blocked = await toggle(pathBlock(user.uid));
-                  toast(
-                      title: blocked ? 'Blocked' : 'Unblocked',
-                      message: 'The user has been ${blocked ? 'blocked' : 'unblocked'} by you');
+                  final isBlock = my!.hasBlocked(user.uid);
+                  if (isBlock) {
+                    my!.unblock(user.uid);
+                    return;
+                  }
+                  my!.block(user.uid);
+                  return;
                 },
-                child: Database(
-                  path: pathBlock(user.uid),
-                  builder: (value, string) => Text(value == null ? 'Block' : 'Unblock'),
+                child: UserBlocked(
+                  otherUser: user,
+                  blockedBuilder: (context) => const Text('Unblock'),
+                  notBlockedBuilder: (context) => const Text('Block'),
                 ),
               ),
             ),

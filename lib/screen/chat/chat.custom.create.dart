@@ -1,6 +1,7 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sns/widgets/methods.dart';
 
 class CustomCreateDialog extends StatefulWidget {
   const CustomCreateDialog({
@@ -18,6 +19,7 @@ class CustomCreateDialog extends StatefulWidget {
 
 class _CustomCreateDialogState extends State<CustomCreateDialog> {
   List<String> uids = [];
+  List<String> exemptedUsers = [myUid!];
   final roomName = TextEditingController();
 
   @override
@@ -63,9 +65,14 @@ class _CustomCreateDialogState extends State<CustomCreateDialog> {
             const Divider(thickness: 2, endIndent: sizeLg, indent: sizeLg),
             Expanded(
               child: UserListView(
-                onTap: (user) => setState(() {
-                  uids.add(user.uid);
-                }),
+                // not rebuilding, back on this
+                exemptedUsers: exemptedUsers,
+                onTap: (user) => setState(
+                  () {
+                    uids.add(user.uid);
+                    exemptedUsers.add(user.uid);
+                  },
+                ),
               ),
             ),
             Row(
@@ -84,25 +91,8 @@ class _CustomCreateDialogState extends State<CustomCreateDialog> {
                       );
                       widget.success(createdRoom);
                     }
-                    uids.add(myUid!);
-                    final roomId = chatCol.doc().id;
-                    debugPrint(roomId);
-                    final roomData = Room.toCreate(
-                      name: roomName.text,
-                      roomId: roomId,
-                      master: myUid!,
-                      group: true,
-                      open: true,
-                      users: uids,
-                    );
-                    await Room.doc(roomId).set(roomData);
-                    await ChatService.instance.sendProtocolMessage(
-                      room: Room.fromJson(roomData),
-                      protocol: Protocol.chatRoomCreated.name,
-                      text: tr.chatRoomCreateDialog,
-                    );
+                    final roomData = await createRoom(uids, roomName.text);
                     Room room = Room.fromJson(roomData);
-
                     widget.success(room);
                     if (context.mounted) {
                       context.pop();
@@ -137,7 +127,10 @@ class _CustomCreateDialogState extends State<CustomCreateDialog> {
               right: -20,
               child: IconButton(
                 onPressed: () => setState(() {
-                  uids.remove(uids[index]);
+                  if (uids.isNotEmpty && exemptedUsers.isNotEmpty) {
+                    exemptedUsers.remove(uids[index]);
+                    uids.remove(uids[index]);
+                  }
                 }),
                 icon: Icon(
                   Icons.cancel,

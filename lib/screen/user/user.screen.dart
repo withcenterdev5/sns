@@ -46,7 +46,7 @@ class _UserScreenState extends State<UserScreen> {
                 ],
               ),
               if (user.isComplete == true) ...[
-                UserInformations(user: user),
+                const UserInformations(),
               ]
             ],
           ),

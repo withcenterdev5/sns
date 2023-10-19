@@ -1,6 +1,6 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sns/widgets/init.dart';
+import 'package:sns/widgets/methods.dart';
 import 'package:sns/widgets/app.bar.dart';
 import 'package:sns/router/router.dart';
 import 'package:sns/screen/chat/chat.screen.dart';
@@ -32,7 +32,7 @@ class BodyScreen extends StatefulWidget {
 }
 
 class _BodyScreenState extends State<BodyScreen> {
-  int index = 0;
+  int index = 1;
   late Widget widgetChild;
   @override
   void initState() {
