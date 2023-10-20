@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sns/authentication/login.dart';
 import 'package:sns/main.dart';
-import 'package:sns/widgets/app.bar.dart';
+import 'package:sns/other_widgets/app.bar.dart';
 import 'package:sns/screen/landing.page.dart';
 import 'package:sns/screen/user/user.edit.screen.dart';
 

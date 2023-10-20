@@ -1,7 +1,7 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sns/widgets/methods.dart';
+import 'package:sns/other_widgets/methods.dart';
 
 PreferredSizeWidget appBar(BuildContext context) {
   return AppBar(

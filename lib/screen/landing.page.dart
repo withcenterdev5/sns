@@ -1,7 +1,7 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sns/widgets/methods.dart';
-import 'package:sns/widgets/app.bar.dart';
+import 'package:sns/other_widgets/methods.dart';
+import 'package:sns/other_widgets/app.bar.dart';
 import 'package:sns/router/router.dart';
 import 'package:sns/screen/chat/chat.screen.dart';
 import 'package:sns/screen/post/post.screen.dart';

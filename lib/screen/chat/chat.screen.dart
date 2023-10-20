@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sns/screen/chat/chat.custom.list_tile.dart';
 import 'package:sns/screen/chat/chat.custom.list_view.dart';
-import 'package:sns/widgets/app.bar.dart';
-import 'package:sns/widgets/methods.dart';
+import 'package:sns/other_widgets/app.bar.dart';
+import 'package:sns/other_widgets/methods.dart';
 import 'package:sns/screen/chat/chat.custom.create.dart';
-import 'package:sns/widgets/stack.floating.dart';
+import 'package:sns/other_widgets/stack.floating.dart';
 
 class ChatList extends StatefulWidget {
   const ChatList({super.key});
@@ -49,14 +49,19 @@ class _ChatListState extends State<ChatList> {
             Expanded(
               child: CustomChatRoom(
                 controller: chatListViewController,
-                tileBuilder: (context, room) => CustomChatListTile(room: room),
-                singleChatOnly: false,
-                itemBuilder: (context, room) => ChatRoomListTile(
+                itemBuilder: (context, room) => CustomChatListTile(
                   room: room,
                   onTap: () {
                     chatListViewController.showChatRoom(context: context, room: room);
                   },
                 ),
+                singleChatOnly: false,
+                // itemBuilder: (context, room) => ChatRoomListTile(
+                //   room: room,
+                //   onTap: () {
+                //     chatListViewController.showChatRoom(context: context, room: room);
+                //   },
+                // ),
               ),
             ),
           ],

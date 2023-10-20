@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),
                 child: Center(
                   child: SizedBox(
-                    height: size.height * .3,
+                    height: size.height * .35,
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.only(left: sizeSm, right: sizeSm),

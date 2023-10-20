@@ -1,18 +1,21 @@
 import 'package:fireflutter/fireflutter.dart';
 import 'package:flutter/material.dart';
-import 'package:sns/widgets/methods.dart';
+import 'package:sns/other_widgets/methods.dart';
 
 class CustomChatListTile extends StatelessWidget {
   const CustomChatListTile({
     super.key,
     required this.room,
+    required this.onTap,
     this.avatarSize = 24,
   });
   final Room room;
   final double avatarSize;
+  final void Function() onTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: room.isSingleChat
           ? UserAvatar(
               uid: room.lastMessage!.uid,

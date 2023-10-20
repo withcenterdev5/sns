@@ -8,13 +8,24 @@ environment:
 
 dependencies:
   google_fonts: ^6.1.0
-  firebase_auth: ^4.10.1
-  firebase_core: ^2.17.0
   flutter:
     sdk: flutter
   go_router: ^11.1.4
   fireflutter:
     path: ../..
+  cloud_firestore: ^4.10.0
+  firebase_auth: ^4.10.0
+  firebase_core: ^2.17.0
+  firebase_ui_firestore: ^1.5.12
+
+dependency_overrides:
+  cloud_firestore: 4.9.3
+  firebase_auth: 4.10.1
+  firebase_core: 2.17.0
+  firebase_database: 10.2.7
+  firebase_dynamic_links: 5.3.7
+  firebase_messaging: 14.6.9
+  firebase_storage: 11.2.8
 
 dev_dependencies:
   flutter_test:
